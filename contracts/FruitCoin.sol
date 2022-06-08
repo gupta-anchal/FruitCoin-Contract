@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract FruitCoin is ERC20, Ownable {
 
-    // mapping(address => uint256) balances;
+    mapping(address => uint256) TokenList;
     uint256 public _totalSupply;
     uint public maxSupply;
 
@@ -48,16 +48,20 @@ contract FruitCoin is ERC20, Ownable {
         address to,
         uint256 amount
     ) internal virtual {
+        
         //if(_balances[from] == 0 && _balaces[from] is found in TokenList){
             // Delete address from TokenList
+            // delete TokenList[from];
         // }
         // else if(_balances[from] > 0 && _balances[from] is not found in TokenList) {
-            // Add _balances[from] to TokenList
+            //Add address to TokenList
+            // TokenList[from]  = _balance[from];
         // }
 
 
         // if(_balances[to] is not present in TokenList){
-            // Add balances[to] to TokenList
+            // Add Address to TokenList
+            // TokenList[to]  = _balance[to];
         // }
     }
 
