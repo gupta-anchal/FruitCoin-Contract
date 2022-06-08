@@ -31,6 +31,34 @@ contract FruitCoin is ERC20, Ownable {
     function burn(uint256 amount) external {
         _burn(msg.sender, amount);
     }
-  
+    
+
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual {
+        
+    }
+
+
+
+    function _afterTokenTransfer(
+        address from,
+        address to,
+        uint256 amount
+    ) internal virtual {
+        //if(_balances[from] == 0 && _balaces[from] is found in TokenList){
+            // Delete address from TokenList
+        // }
+        // else if(_balances[from] > 0 && _balances[from] is not found in TokenList) {
+            // Add _balances[from] to TokenList
+        // }
+
+
+        // if(_balances[to] is not present in TokenList){
+            // Add balances[to] to TokenList
+        // }
+    }
 
 }
