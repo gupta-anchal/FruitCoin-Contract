@@ -6,12 +6,13 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract FruitCoin is ERC20, Ownable {
+
+    // mapping(address => uint256) balances;
     uint256 public _totalSupply;
     uint public maxSupply;
 
     constructor(uint256 initialSupply) ERC20("FruitToken", "FRUIT") {
         maxSupply = 10000 * 10**18; 
-        // initialSupply = 1000;
         _mint(msg.sender, initialSupply); // Mints 100 tokens to wallet
     }
 
