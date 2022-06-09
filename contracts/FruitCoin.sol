@@ -8,11 +8,11 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract FruitCoin is ERC20, Ownable {
 
     mapping(address => uint256) TokenList;
+    mapping(address => uint256) private _balances;
     uint256 public _totalSupply;
-    uint public maxSupply;
+    uint public maxSupply = 10000 * 10**18;
 
-    constructor(uint256 initialSupply) ERC20("FruitToken", "FRUIT") {
-        maxSupply = 10000 * 10**18; 
+    constructor(uint256 initialSupply) ERC20("FruitToken", "FRUIT") { 
         _mint(msg.sender, initialSupply); // Mints 100 tokens to wallet
     }
 
@@ -26,28 +26,22 @@ contract FruitCoin is ERC20, Ownable {
 
       _totalSupply += amount;
       _mint(account, amount);
-  }
+    }
 
     function burn(uint256 amount) external {
         _burn(msg.sender, amount);
     }
-    
 
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal virtual {
-        
+    function balanceOf(address account) public view virtual override returns (uint256) {
+        return _balances[account];
     }
-
 
 
     function _afterTokenTransfer(
         address from,
         address to,
         uint256 amount
-    ) internal virtual {
+    ) internal virtual override{
         
         //if(_balances[from] == 0 && _balaces[from] is found in TokenList){
             // Delete address from TokenList
