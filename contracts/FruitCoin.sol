@@ -7,56 +7,69 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract FruitCoin is ERC20, Ownable {
 
-    mapping(address => uint256) TokenList;
-    mapping(address => uint256) private _balances;
-    uint256 public _totalSupply;
-    uint public maxSupply = 10000 * 10**18;
+    address[] public TokenList;
+    // mapping(address => uint256) private _balances;
+    uint private maxSupply = 10000 * (10**18);
 
     constructor(uint256 initialSupply) ERC20("FruitToken", "FRUIT") { 
         _mint(msg.sender, initialSupply); // Mints 100 tokens to wallet
     }
 
 
-    function totalSupply() public view virtual override returns (uint256) {
-        return _totalSupply;
-    }
+    // function totalSupply() public view virtual override returns (uint256) {
+    //     return _totalSupply;
+    // }
 
     function mint(address account, uint256 amount) external onlyOwner  {
-        require(maxSupply > _totalSupply + amount, "Insufficient supply");
-
-      _totalSupply += amount;
-      _mint(account, amount);
+        require(maxSupply > totalSupply() + amount, "Insufficient supply");
+        _mint(account, amount);
     }
 
-    function burn(uint256 amount) external {
+    function burn(uint256 amount) external onlyOwner {
         _burn(msg.sender, amount);
     }
 
-    function balanceOf(address account) public view virtual override returns (uint256) {
-        return _balances[account];
-    }
+    // function balanceOf(address account) public view virtual override returns (uint256) {
+    //     return _balances[account];
+    // }
 
 
     function _afterTokenTransfer(
         address from,
-        address to,
-        uint256 amount
-    ) internal virtual override{
+        address to
+    ) internal virtual {
         
-        //if(_balances[from] == 0 && _balaces[from] is found in TokenList){
-            // Delete address from TokenList
-            // delete TokenList[from];
-        // }
-        // else if(_balances[from] > 0 && _balances[from] is not found in TokenList) {
+        if(balanceOf(from) == 0 && AddressExists(from)){  //from address is found in TokenList
+            //Delete address from TokenList
+            uint index = IndexOfAddress(from);
+            delete TokenList[index];
+        }
+        else if(balanceOf(from) > 0 && !AddressExists(from)) { //from address is not found in TokenList
             //Add address to TokenList
-            // TokenList[from]  = _balance[from];
-        // }
-
-
-        // if(_balances[to] is not present in TokenList){
-            // Add Address to TokenList
-            // TokenList[to]  = _balance[to];
-        // }
+            TokenList.push(from);
+        }
+        if(!AddressExists(to)){  //to address is not found in TokenList
+            //Add Address to TokenList
+            TokenList.push(to);
+        }
     }
+
+    function AddressExists(address addr) public view returns (bool) {
+        for (uint i = 0; i < TokenList.length; i++) {
+            if (keccak256(abi.encodePacked(TokenList[i])) == keccak256(abi.encodePacked(addr))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function IndexOfAddress(address addr) public view returns (uint) {
+        for (uint i = 0; i < TokenList.length; i++) {
+            if (keccak256(abi.encodePacked(TokenList[i])) == keccak256(abi.encodePacked(addr))) {
+                return i;
+            }
+        }
+    }
+
 
 }
