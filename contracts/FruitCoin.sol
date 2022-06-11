@@ -30,36 +30,27 @@ contract FruitCoin is ERC20, Ownable {
         address to
     ) internal virtual {
         
-        if(balanceOf(from) == 0 && AddressExists(from)){  //from address is found in TokenList
+        if(balanceOf(from) == 0 && AddressExists(from) > -1){  //from address is found in TokenList
             //Delete address from TokenList
-            uint index = IndexOfAddress(from);
-            delete TokenList[index];
+            delete TokenList[uint256(AddressExists(from))];
         }
-        else if(balanceOf(from) > 0 && !AddressExists(from)) { //from address is not found in TokenList
+        else if(balanceOf(from) > 0 && AddressExists(from) == -1) { //from address is not found in TokenList
             //Add address to TokenList
             TokenList.push(from);
         }
-        if(!AddressExists(to)){  //to address is not found in TokenList
+        if(AddressExists(to) == -1){  //to address is not found in TokenList
             //Add Address to TokenList
             TokenList.push(to);
         }
     }
 
-    function AddressExists(address addr) public view returns (bool) {
+    function AddressExists(address addr) public view returns (int) {
         for (uint i = 0; i < TokenList.length; i++) {
             if (keccak256(abi.encodePacked(TokenList[i])) == keccak256(abi.encodePacked(addr))) {
-                return true;
+                return int256(i);
             }
         }
-        return false;
-    }
-
-    function IndexOfAddress(address addr) public view returns (uint) {
-        for (uint i = 0; i < TokenList.length; i++) {
-            if (keccak256(abi.encodePacked(TokenList[i])) == keccak256(abi.encodePacked(addr))) {
-                return i;
-            }
-        }
+        return -1;
     }
 
 
