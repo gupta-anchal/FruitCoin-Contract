@@ -8,17 +8,12 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 contract FruitCoin is ERC20, Ownable {
 
     address[] public TokenList;
-    // mapping(address => uint256) private _balances;
     uint private maxSupply = 10000 * (10**18);
 
     constructor(uint256 initialSupply) ERC20("FruitToken", "FRUIT") { 
         _mint(msg.sender, initialSupply); // Mints 100 tokens to wallet
     }
 
-
-    // function totalSupply() public view virtual override returns (uint256) {
-    //     return _totalSupply;
-    // }
 
     function mint(address account, uint256 amount) external onlyOwner  {
         require(maxSupply > totalSupply() + amount, "Insufficient supply");
@@ -28,10 +23,6 @@ contract FruitCoin is ERC20, Ownable {
     function burn(uint256 amount) external onlyOwner {
         _burn(msg.sender, amount);
     }
-
-    // function balanceOf(address account) public view virtual override returns (uint256) {
-    //     return _balances[account];
-    // }
 
 
     function _afterTokenTransfer(
