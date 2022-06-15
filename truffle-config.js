@@ -79,7 +79,7 @@
        confirmations: 2
      },
      bsc_testnet: {
-       provider: () => new HDWalletProvider(private_key, `https://data-seed-prebsc-1-s1.binance.org:8545`),
+       provider: () => new HDWalletProvider(private_key, `https://data-seed-prebsc-2-s1.binance.org:8545/`),
        network_id: 97,
        skipDryRun: true,
        timeoutBlocks: 200,

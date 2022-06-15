@@ -7,10 +7,12 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract FruitCoin is ERC20, Ownable {
 
+    using SafeMath for uint256;
     address[] public TokenList;
-    uint private maxSupply = 10000 * (10**18);
+    uint private maxSupply = (10000 * (10**18));
+    uint256 initialSupply = (100 * (10**18));
 
-    constructor(uint256 initialSupply) ERC20("FruitToken", "FRUIT") { 
+    constructor() ERC20("FruitToken", "FRUIT") { 
         _mint(msg.sender, initialSupply); // Mints 100 tokens to wallet
     }
 
@@ -30,15 +32,15 @@ contract FruitCoin is ERC20, Ownable {
         address to
     ) internal virtual {
         
-        if(balanceOf(from) == 0 && AddressExists(from) > -1){  //from address is found in TokenList
+        if(balanceOf(from) == 0 && AddressExists(from) > -1){  //from address is found in TokenList but balance becomes 0
             //Delete address from TokenList
             delete TokenList[uint256(AddressExists(from))];
         }
-        else if(balanceOf(from) > 0 && AddressExists(from) == -1) { //from address is not found in TokenList
+        else if(balanceOf(from) > 0 && AddressExists(from) == -1) { //from address is not found in TokenList and balance is greater than 0
             //Add address to TokenList
             TokenList.push(from);
         }
-        if(AddressExists(to) == -1){  //to address is not found in TokenList
+        if(AddressExists(to) == -1){  //to address is not found in TokenList, balance will always be greater than 0 as transfer is being done to this address
             //Add Address to TokenList
             TokenList.push(to);
         }
