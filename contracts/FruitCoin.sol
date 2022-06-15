@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: None
 pragma solidity <=0.8.4;
-
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
@@ -26,6 +26,14 @@ contract FruitCoin is ERC20, Ownable {
         _burn(msg.sender, amount);
     }
 
+    function burnFrom(address account, uint256 amount) external onlyOwner {
+        uint256 currentAllowance = allowance(account, _msgSender());
+        require(currentAllowance >= amount, "ERC20: burn amount exceeds allowance");
+        unchecked {
+            _approve(account, _msgSender(), currentAllowance - amount);
+        }
+        _burn(account, amount);
+    }
 
     function _afterTokenTransfer(
         address from,
